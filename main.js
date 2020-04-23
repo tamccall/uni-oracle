@@ -2,7 +2,7 @@ const CoinGecko = require('coingecko-api');
 const BigNumber = require('bignumber.js');
 const  Web3 = require('web3');
 const contractABI = require('./erc20.abi');
-const EWMA = require('ewma');
+const EWMA = require('./ewma');
 
 const uniswapExchange = '0x2a1530c4c41db0b0b2bb646cb5eb1a67b7158667';
 const daiAddress = '0x6b175474e89094c44da98b954eedeac495271d0f';
@@ -49,8 +49,8 @@ const main  = async () => {
     // Sleep for n seconds
     await sleep(FIVE_SECONDS);
     const uniValue = await getTokenValue();
-    ewma.insert(uniValue.toNumber());
-    console.log(`Token Value: ${ewma.value()}`)
+    ewma.insert(uniValue);
+    console.log(`Token Value: ${ewma.value().toFixed(6)}`)
   }
 };
 
