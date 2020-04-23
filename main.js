@@ -4,9 +4,6 @@ const  Web3 = require('web3');
 const contractABI = require('./erc20.abi');
 const EWMA = require('ewma');
 
-//2. Initiate the CoinGecko API Client
-const CoinGeckoClient = new CoinGecko();
-
 const uniswapExchange = '0x2a1530c4c41db0b0b2bb646cb5eb1a67b7158667';
 const daiAddress = '0x6b175474e89094c44da98b954eedeac495271d0f';
 const DECIMAL_PLACES = new BigNumber(10).pow(18);
