@@ -8,5 +8,11 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bignumber.js": "^9.0.0",
+    "coingecko-api": "^1.0.10",
+    "ewma": "^2.0.1",
+    "web3": "^1.2.6"
+  }
 }
