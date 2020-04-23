@@ -41,7 +41,9 @@ const main  = async () => {
 
   const initialValue = await getTokenValue();
   const FIVE_SECONDS = 5 * 1000;
-  const ewma = new EWMA(FIVE_SECONDS, initialValue.toNumber());
+  const FIVE_MINUTES = 5 * 60 * 1000;
+  const halfLife = Math.pow(1/2, 1 / (FIVE_MINUTES));
+  const ewma = new EWMA(halfLife, initialValue.toNumber());
   console.log('Getting token value');
   for (let i = 0; i < 50; i++) {
     // Sleep for n seconds
