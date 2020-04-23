@@ -50,7 +50,7 @@ const main  = async () => {
     await sleep(FIVE_SECONDS);
     const uniValue = await getTokenValue();
     ewma.insert(uniValue);
-    console.log(`Token Value: ${ewma.value().toFixed(6)}`)
+    console.log(`Token Value: ${ewma.value().toFixed(18)}`)
   }
 };
 
