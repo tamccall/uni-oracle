@@ -9,7 +9,8 @@ const daiAddress = '0x6b175474e89094c44da98b954eedeac495271d0f';
 const DECIMAL_PLACES = new BigNumber(10).pow(18);
 
 const main  = async () => {
-  const web3 = new Web3(process.env['MAINNET_URL']);
+  const provider = new Web3.providers.WebsocketProvider(process.env['MAINNET_URL']);
+  const web3 = new Web3(provider);
   const coinGeckoClient = new CoinGecko();
   const uniToken = new web3.eth.Contract(contractABI, uniswapExchange);
   const daiToken = new web3.eth.Contract(contractABI, daiAddress);
@@ -40,18 +41,27 @@ const main  = async () => {
   };
 
   const initialValue = await getTokenValue();
-  const FIVE_SECONDS = 5 * 1000;
-  const ONE_MINUTES = 60 * 1000;
-  const halfLife = Math.pow(1/2, 1 / (ONE_MINUTES));
-  const ewma = new EWMA(halfLife, initialValue.toNumber());
+  const ONE_SECOND = 1000;
+  const ONE_MINUTE = 60 * 1000;
+  const halfLife = Math.pow(1/2, 1 / (ONE_MINUTE));
+  const ewma = new EWMA(halfLife, initialValue);
   console.log('Getting token value');
-  for (let i = 0; i < 120; i++) {
-    // Sleep for n seconds
-    await sleep(FIVE_SECONDS);
+
+  web3.eth.subscribe('newBlockHeaders', async (err) => {
+    if (err) {
+      throw err;
+    }
     const uniValue = await getTokenValue();
     ewma.insert(uniValue);
-    console.log(`Token Value: ${ewma.value().toFixed(18)}`)
+  });
+
+  for (let i = 0; i < 600; i++) {
+    // Sleep for n seconds
+    await sleep(ONE_SECOND);
+    if (i % 10 === 0) {
+      console.log(`Token value is: ${ewma.value().toFixed(18)}`)
+    }
   }
 };
 
-main().catch(error => console.error('caught an error', error));
+main().catch(error => console.error('caught an error', error)).finally(()=>console.log('done'));
