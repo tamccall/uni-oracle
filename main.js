@@ -55,7 +55,7 @@ const main  = async () => {
     ewma.insert(uniValue);
   });
 
-  for (let i = 0; i < 600; i++) {
+  for (let i = 0; i < 120; i++) {
     // Sleep for n seconds
     await sleep(ONE_SECOND);
     if (i % 10 === 0) {
