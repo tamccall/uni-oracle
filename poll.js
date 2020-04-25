@@ -50,8 +50,12 @@ const pollPrice = async () => {
     }
 
     console.log('getting token value');
-    const uniValue = await getTokenValue();
-    ewma.insert(uniValue);
+    try{
+      const uniValue = await getTokenValue();
+      ewma.insert(uniValue);
+    } catch (e) {
+      console.error('error getting token value', e)
+    }
   });
 
   return {
