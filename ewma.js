@@ -1,4 +1,5 @@
 const BigNumber = require('bignumber.js');
+const ONE_MINUTE = 60*1000;
 
 function Ewma(halfLifeMs, initialValue) {
   this._decay = halfLifeMs;
@@ -12,7 +13,7 @@ module.exports = Ewma;
 Ewma.prototype.insert = function insert(x) {
   const self = this;
   const now = self._clock.now();
-  const elapsed = (now - self._stamp) / (60*1000);
+  const elapsed = (now - self._stamp) / (ONE_MINUTE);
   self._stamp = now;
 
   // This seemingly magic equation is derived from the fact that we are
