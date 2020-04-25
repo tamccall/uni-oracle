@@ -42,8 +42,7 @@ const main  = async () => {
 
   const initialValue = await getTokenValue();
   const ONE_SECOND = 1000;
-  const ONE_MINUTE = 60 * 1000;
-  const halfLife = Math.pow(1/2, 1 / (ONE_MINUTE));
+  const halfLife = Math.pow(1/2, 1 / 5);
   const ewma = new EWMA(halfLife, initialValue);
   console.log('Getting token value');
 

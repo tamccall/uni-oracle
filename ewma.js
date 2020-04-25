@@ -12,7 +12,7 @@ module.exports = Ewma;
 Ewma.prototype.insert = function insert(x) {
   const self = this;
   const now = self._clock.now();
-  const elapsed = now - self._stamp;
+  const elapsed = (now - self._stamp) / (60*1000);
   self._stamp = now;
 
   // This seemingly magic equation is derived from the fact that we are
