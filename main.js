@@ -4,7 +4,9 @@ const { createTerminus } = require('@godaddy/terminus');
 const http = require('http');
 
 (async () => {
-  const {ewma} = await pollPrice();
+  const {ewma} = await pollPrice((uniValue) => {
+    console.log(`Value is: ${uniValue.toFixed(18)}`)
+  });
   const app = express();
   app.get('/price', (req, res) => {
     res.send({

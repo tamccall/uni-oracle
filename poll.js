@@ -9,7 +9,7 @@ const uniswapExchange = '0x2a1530c4c41db0b0b2bb646cb5eb1a67b7158667';
 const daiAddress = '0x6b175474e89094c44da98b954eedeac495271d0f';
 const DECIMAL_PLACES = new BigNumber(10).pow(18);
 
-const pollPrice = async () => {
+const pollPrice = async (cb) => {
   const provider = new Web3.providers.WebsocketProvider(process.env['MAINNET_URL']);
   const web3 = new Web3(provider);
   const coinGeckoClient = new CoinGecko();
@@ -50,11 +50,18 @@ const pollPrice = async () => {
     }
 
     console.log('getting token value');
+    let uniValue;
     try{
-      const uniValue = await getTokenValue();
-      ewma.insert(uniValue);
+      uniValue = await getTokenValue();
     } catch (e) {
-      console.error('error getting token value', e)
+      console.error('error getting token value', e);
+      return
+    }
+    ewma.insert(uniValue);
+    try {
+      await cb(uniValue)
+    } catch (e) {
+      console.error('error calling the callback', err);
     }
   });
 
