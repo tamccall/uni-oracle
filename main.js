@@ -9,6 +9,7 @@ const  Web3 = require('web3');
 
   const client = await ssbClient();
   const web3 = new Web3();
+  var account = web3.eth.accounts.create();
   const {ewma} = await pollPrice((uniValue) => {
     console.info('have price publishing to skuttlebutt');
     const timestamp = Math.floor(new Date().getTime() / 1000);
@@ -17,14 +18,17 @@ const  Web3 = require('web3');
     const assetPair = 'UNIV1USD';
     const timeHex = web3.utils.numberToHex(timestamp);
     const assetPairHex = web3.utils.toHex(assetPair);
+    const hash = web3.utils.sha3(`0x${priceHex}${timeHex}${assetPairHex}`);
+    const signature = account.sign(hash).signature;
     client.publish({
       timeHex,
       priceHex,
       assetPairHex,
+      hash,
+      signature,
       type: assetPair,
       time: timestamp,
       price: uniValue.toNumber(),
-      hash: web3.utils.sha3(`0x${priceHex}${timeHex}${assetPairHex}`)
     }, (err, msg) => {
       if (err) {
         console.error('error publishing to skuttlebutt', err)
