@@ -3,15 +3,22 @@ const express = require('express');
 const { createTerminus } = require('@godaddy/terminus');
 const http = require('http');
 const ssbClient = require('ssb-client');
+const  Web3 = require('web3');
 
 (async () => {
 
   const client = await ssbClient();
-
+  const web3 = new Web3();
   const {ewma} = await pollPrice((uniValue) => {
     console.info('have price publishing to skuttlebutt');
+    const timestamp = Math.floor(new Date().getTime() / 1000);
+    const priceAsWei = web3.utils.toWei(uniValue.toFixed(18), 'ether');
+    const priceHex = web3.utils.toHex(priceAsWei);
     client.publish({
       type: 'UNIV1USD',
+      time: timestamp,
+      timeHex: web3.utils.numberToHex(timestamp),
+      priceHex,
       price: uniValue.toNumber()
     }, (err, msg) => {
       if (err) {

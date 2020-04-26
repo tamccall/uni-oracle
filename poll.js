@@ -61,7 +61,7 @@ const pollPrice = async (cb) => {
     try {
       await cb(uniValue)
     } catch (e) {
-      console.error('error calling the callback', err);
+      console.error('error calling the callback', e);
     }
   });
 
