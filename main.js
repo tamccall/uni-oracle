@@ -14,12 +14,17 @@ const  Web3 = require('web3');
     const timestamp = Math.floor(new Date().getTime() / 1000);
     const priceAsWei = web3.utils.toWei(uniValue.toFixed(18), 'ether');
     const priceHex = web3.utils.toHex(priceAsWei);
+    const assetPair = 'UNIV1USD';
+    const timeHex = web3.utils.numberToHex(timestamp);
+    const assetPairHex = web3.utils.toHex(assetPair);
     client.publish({
-      type: 'UNIV1USD',
-      time: timestamp,
-      timeHex: web3.utils.numberToHex(timestamp),
+      timeHex,
       priceHex,
-      price: uniValue.toNumber()
+      assetPairHex,
+      type: assetPair,
+      time: timestamp,
+      price: uniValue.toNumber(),
+      hash: web3.utils.sha3(`0x${priceHex}${timeHex}${assetPairHex}`)
     }, (err, msg) => {
       if (err) {
         console.error('error publishing to skuttlebutt', err)
