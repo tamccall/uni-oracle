@@ -34,7 +34,7 @@ const  Web3 = require('web3');
         console.error('error publishing to skuttlebutt', err)
       }
 
-      console.info('successully published message to scuttlebutt', msg)
+      console.info('successfully published message to scuttlebutt', msg)
     })
   });
 

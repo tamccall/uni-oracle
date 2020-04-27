@@ -29,13 +29,21 @@ const pollPrice = async (cb) => {
     const ethInContractString = await web3.eth.getBalance(uniswapExchange);
     const ethInContract = new BigNumber(ethInContractString).div(DECIMAL_PLACES);
 
-    const ethPrice = await coinGeckoClient.simple.price({
+    const coinGeckoPrice = await coinGeckoClient.simple.price({
       ids: ['ethereum'],
       vs_currencies: ['usd'],
     });
 
-    const ethPriceBig = new BigNumber(ethPrice.data.ethereum.usd);
-    return ethInContract.times(ethPriceBig).plus(daiInContract).div(uniSupply);
+    const ethPrice = new BigNumber(coinGeckoPrice.data.ethereum.usd);
+    const ethPerShare = ethInContract.div(uniSupply);
+    const daiPerShare = daiInContract.div(uniSupply);
+    const invariant = ethPerShare.times(daiPerShare);
+    const daiETH = new BigNumber(1).div(ethPrice);
+
+    const daiFairVal = invariant.div(daiETH).sqrt();
+    const ethFairVal = invariant.div(ethPrice).sqrt();
+
+    return daiFairVal.plus(ethFairVal.times(ethPrice))
   };
 
   const initialVal = await getTokenValue();
