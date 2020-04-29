@@ -51,7 +51,7 @@ const  Web3 = require('web3');
       console.info('shutting down');
       subscription.unsubscribe((err) => {
         if (err) {
-          console.error('error unsubscribing', err)
+          console.error('error un-subscribing', err)
         }
       })
     }
