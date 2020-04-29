@@ -9,8 +9,8 @@ const  Web3 = require('web3');
 
   const client = await ssbClient();
   const web3 = new Web3();
-  var account = web3.eth.accounts.create();
-  const {ewma} = await pollPrice((uniValue) => {
+  const account = web3.eth.accounts.create();
+  const {ewma, subscription} = await pollPrice((uniValue) => {
     console.info('have price publishing to skuttlebutt');
     const timestamp = Math.floor(new Date().getTime() / 1000);
     const priceAsWei = web3.utils.toWei(uniValue.toFixed(18), 'ether');
@@ -46,6 +46,15 @@ const  Web3 = require('web3');
   });
   const server = http.createServer(app);
   createTerminus(server, {
+    signal: 'SIGINT',
+    beforeShutdown: () => {
+      console.info('shutting down');
+      subscription.unsubscribe((err) => {
+        if (err) {
+          console.error('error unsubscribing', err)
+        }
+      })
+    }
   });
   console.log('starting server');
   server.listen(8080);
