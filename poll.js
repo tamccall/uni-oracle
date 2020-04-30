@@ -4,7 +4,6 @@ const EWMA = require('./ewma');
 const  Web3 = require('web3');
 const CoinGecko = require('coingecko-api');
 
-
 const uniswapExchange = '0x2a1530c4c41db0b0b2bb646cb5eb1a67b7158667';
 const daiAddress = '0x6b175474e89094c44da98b954eedeac495271d0f';
 const DECIMAL_PLACES = new BigNumber(10).pow(18);
@@ -67,7 +66,7 @@ const pollPrice = async (cb) => {
     }
     ewma.insert(uniValue);
     try {
-      await cb(uniValue)
+      await cb(ewma.value())
     } catch (e) {
       console.error('error calling the callback', e);
     }
