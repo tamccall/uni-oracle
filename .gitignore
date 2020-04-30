@@ -2,3 +2,4 @@
 *.iml
 .envrc
 node_modules
+account.keystore

@@ -4,12 +4,14 @@ const { createTerminus } = require('@godaddy/terminus');
 const http = require('http');
 const ssbClient = require('ssb-client');
 const  Web3 = require('web3');
+const fs = require('fs');
 
 (async () => {
 
   const client = await ssbClient();
   const web3 = new Web3();
-  const account = web3.eth.accounts.create();
+  const keystore = fs.readFileSync(process.env['ETH_KEYSTORE']).toString();
+  const account = web3.eth.accounts.decrypt(keystore, process.env['ETH_PASSWORD']);
   const {ewma, subscription} = await pollPrice((uniValue) => {
     console.info('have price publishing to skuttlebutt');
     const timestamp = Math.floor(new Date().getTime() / 1000);
