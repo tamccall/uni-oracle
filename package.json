@@ -13,7 +13,7 @@
     "@godaddy/terminus": "^4.3.1",
     "bignumber.js": "^9.0.0",
     "coingecko-api": "^1.0.10",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "ssb-client": "^4.9.0",
     "ssb-keys": "^7.2.2",
     "web3": "^1.2.6"
